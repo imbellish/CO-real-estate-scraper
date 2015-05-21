@@ -1,0 +1,3 @@
+drop table if exists comm_properties;
+.mode csv
+.import real_property_apartment_and_commercial_characteristics.csv comm_properties

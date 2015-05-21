@@ -1,0 +1,3 @@
+drop table if exists comm_properties;
+.mode csv
+.import test_data.csv comm_properties
