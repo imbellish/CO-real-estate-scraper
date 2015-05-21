@@ -26,7 +26,7 @@ An executable for sqlite3 is included for conveneince's sake.
 
 * Eventually, it would be good to move to PostgreSQL, as it has a native column definition that works really well with GIS data (i.e. GPS location)
 * We'll need to store this information so that we don't end up relying on the Google Maps API on the backend of ChurnOver. That could be too costly. Ideally, as an address comes in, this database would be the first place that it would look - grab the coordinates, and then use those coordinates for use with Socrata.
---* To this end, feel free to get your own Maps API key at https://console.developers.google.com
+  * To this end, feel free to get your own Maps API key at https://console.developers.google.com
 * Ultimately bring in the 'basics' that any real estate brokerage firm would expect from a data service. 
 
 
