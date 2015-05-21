@@ -40,19 +40,42 @@ class TestMain(unittest.TestCase):
 		data = cursor.fetchone()
 		observed = get_location(data)
 		expected = (
-			{'lat': 39.7733071, 'lng': -104.8108087},
+			39.7733071, 
+			-104.8108087, 
 			'4005 Chambers Road, Denver, CO 80239, USA'
 		)
 		db.close()
 		pprint(observed)
-		self.assertEqual(observed, expected)
-	def test_gets_address_and_gps_data(self):
-		db = sqlite3.connect('test_locations.db')
+		self.assertEqual(observed, expected, 
+			"Maps API shows different result than expected."
+		)
+	def test_puts_address_and_gps_data(self):
+		"""
+		Stores Maps API data and normalized address in 
+		a separate database. Data filtering function. 
+		"""
+
+		##########################
+		db = sqlite3.connect('test_db.db')
 		cursor = db.cursor()
-
+		put_location(cursor)
+		db.commit()
+		##########################
+		where = 39.7733071, -104.8108087
+		cursor.execute(
+			"""
+			SELECT pin, lat, lng, address FROM location where lat=? and lng=?
+			""",
+			where
+		)
+		##########################
+		value = cursor.fetchone()
+		self.assertEqual(value, 
+			(163000684, 39.7733071, -104.8108087, 
+				'4005 Chambers Road, Denver, CO 80239, USA')
+		)
+		##########################
 		db.close()
-
-
 
 
 if __name__ == '__main__':

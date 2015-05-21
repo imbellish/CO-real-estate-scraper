@@ -30,13 +30,33 @@ def get_location(address):
 	# takes that string and calls the Maps API
 	gmaps = googlemaps.Client(key=GMAPS_API)
 	geo_result = gmaps.geocode(searchfor + "Denver, CO")
-	# TODO parse geo_result
-	result = geo_result[0]['geometry']['location'], geo_result[0]['formatted_address']
+	# parse geo_result to tuple
+	result = (
+		geo_result[0]['geometry']['location']['lat'],
+		geo_result[0]['geometry']['location']['lng'], 
+		geo_result[0]['formatted_address']
+	)
 	# location should be found here
 	return result
 
-def put_location(cursor, data):
-	pass
+def put_location(cursor):
+	cursor.execute(
+		"""SELECT PIN, SITE_NBR, 
+		SITE_DIR, SITE_NAME, SITE_MODE FROM comm_properties"""
+	)
+	rows = cursor.fetchall()
+	for row in rows:
+		api_request = row[1:]
+		data = get_location(api_request)
+		data = (row[0], data[0], data[1], data[2])
+		cursor.execute(
+			"""
+			INSERT INTO location VALUES (?, ?, ?, ?)
+			""",
+			data
+		)
+	
+
 
 	
 
