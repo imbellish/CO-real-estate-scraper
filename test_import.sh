@@ -1,0 +1,1 @@
+sqlite3 test_db.db < test_commands.txt

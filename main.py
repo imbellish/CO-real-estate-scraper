@@ -4,10 +4,17 @@ import googlemaps
 from settings import GMAPS_API
 
 def create_tables(test=False):
-	if test == True:
-		os.system('test_import')
-	else:
-		os.system('import')
+
+	if os.name == 'nt':	
+		if test == True:
+			os.system('test_import')
+		else:
+			os.system('import')
+	if os.name == 'posix':
+		if test == True:
+			os.system('sh test_import.sh')
+		else:
+			os.system('sh import.sh')
 
 def get_location(address):
 	# https://developers.google.com/maps/documentation/geocoding/
@@ -24,8 +31,12 @@ def get_location(address):
 	gmaps = googlemaps.Client(key=GMAPS_API)
 	geo_result = gmaps.geocode(searchfor + "Denver, CO")
 	# TODO parse geo_result
+	result = geo_result[0]['geometry']['location'], geo_result[0]['formatted_address']
 	# location should be found here
-	return geo_result
+	return result
+
+def put_location(cursor, data):
+	pass
 
 	
 

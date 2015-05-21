@@ -6,7 +6,7 @@ from pprint import pprint
 
 import googlemaps
 
-from main import create_tables, get_location
+from main import create_tables, get_location, put_location
 from settings import GMAPS_API
 
 
@@ -26,7 +26,7 @@ class TestMain(unittest.TestCase):
 		result = cursor.fetchone()
 		db.close()
 		self.assertEqual(result, (64,), "Incorrect number of rows in test_db")
-	def test_gets_gps_data(self):
+	def test_connects_with_maps_api(self):
 		"""
 		Eventually to be thrown into the churn SocrataRequest
 		for more accurate address searching.
@@ -38,8 +38,20 @@ class TestMain(unittest.TestCase):
 			SITE_DIR, SITE_NAME, SITE_MODE FROM comm_properties"""
 		)
 		data = cursor.fetchone()
-		location = get_location(data)
-		pprint(location)
+		observed = get_location(data)
+		expected = (
+			{'lat': 39.7733071, 'lng': -104.8108087},
+			'4005 Chambers Road, Denver, CO 80239, USA'
+		)
+		db.close()
+		pprint(observed)
+		self.assertEqual(observed, expected)
+	def test_gets_address_and_gps_data(self):
+		db = sqlite3.connect('test_locations.db')
+		cursor = db.cursor()
+
+		db.close()
+
 
 
 
