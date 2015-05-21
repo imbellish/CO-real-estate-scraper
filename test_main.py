@@ -2,6 +2,8 @@ import unittest
 import sqlite3
 import csv
 
+from pprint import pprint
+
 import googlemaps
 
 from main import create_tables, get_location
@@ -23,8 +25,7 @@ class TestMain(unittest.TestCase):
 		cursor.execute("SELECT COUNT(*) FROM comm_properties")
 		result = cursor.fetchone()
 		db.close()
-		print(result)
-
+		self.assertEqual(result, (64,), "Incorrect number of rows in test_db")
 	def test_gets_gps_data(self):
 		"""
 		Eventually to be thrown into the churn SocrataRequest
@@ -38,7 +39,7 @@ class TestMain(unittest.TestCase):
 		)
 		data = cursor.fetchone()
 		location = get_location(data)
-		print(location)
+		pprint(location)
 
 
 
